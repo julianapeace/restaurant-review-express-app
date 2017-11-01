@@ -1,0 +1,15 @@
+
+<!-- reviews / stars, title, reviews
+reviewers/name -->
+<h1>{{result.restaurant_name}}</h1>
+<ul>
+  {{#each result}}
+  <li>Rest Name: {{restaurant_name}}<br>
+  Stars: {{review_stars}}<br>
+  Review Title: {{review_title}}<br>
+  Review: {{review}}<br>
+  Reviewer Name: {{reviewer_name}}<br>
+  Reviewer email:{{reviewer_email}}
+</li>
+  {{/each}}
+</ul>
