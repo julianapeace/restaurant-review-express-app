@@ -1,6 +1,10 @@
+{{#if error}}
+  <h3>Error</h3>
+  <hp>No Results Found</p>
+  <p>This restaurant is not very popular</p>
+{{else}}
+{{/if}}
 
-<!-- reviews / stars, title, reviews
-reviewers/name -->
 <h1>{{result.restaurant_name}}</h1>
 <ul>
   {{#each result}}
@@ -13,3 +17,18 @@ reviewers/name -->
 </li>
   {{/each}}
 </ul>
+
+<form class="" action="/addreview" method="post">
+  <input type="hidden" name="restaurant_id" value="{{result.[0].restaurant_id}}">
+  <input type="hidden" name="restaurant_name" value="{{result.[0].restaurant_name}}">
+
+  <label for="title">REVIEW TITLE</label>
+  <input type="text" name="title" value="">
+
+  <label for="stars">STARS</label>
+  <input type="number" name="stars" value="">
+  <br>
+  <label for="review">REVIEW</label>
+  <textarea name="review" rows="8" cols="80"></textarea>
+  <button class="btn btn-warning" type="submit" name="button">SUBMIT</button>
+</form>
