@@ -21,7 +21,7 @@ app.use(session({
 app.use(function (req, res, next) {
   if (req.session.user) {
     next();
-  } else if (req.path == '/login') {
+  } else if (req.path == '/login' || req.path =='/newuser' || req.path=='/addnewuser' ||req.path=='/logout') {
     next();
   } else {
     res.redirect('/login');
@@ -51,7 +51,11 @@ app.post('/login', function(req,res, next){
     })
     .catch(next);
 });
-
+app.get('/logout', function(req,res){
+  //delete user cookie
+  res.cookie("connect.sid", "", { expires: new Date() });
+  res.redirect('/login')
+})
 app.get('/', function(req, res, next){
   var user_data = {reviewer_email: req.session.user}
   var query = 'SELECT * FROM reviewer WHERE reviewer_email = ${reviewer_email}'
@@ -62,6 +66,23 @@ app.get('/', function(req, res, next){
     })
     .catch(next);
 });
+
+app.get('/newuser', function(req,res){
+  res.render('new-user.hbs')
+})
+app.post('/addnewuser', function(req,res, next){
+  var data = {reviewer_name:req.body.name, reviewer_email:req.body.email, password: req.body.password}
+  console.log(data)
+  var query = "INSERT INTO reviewer \
+        VALUES (default, ${reviewer_name}, ${reviewer_email}, NULL, ${password}) RETURNING id"
+  db.result(query,data)
+    .then(results => {
+      req.session.user = req.body.email
+      res.redirect('/')
+    })
+    .catch(next);
+})
+
 app.get('/search', function(req, res, next){
   //with GET forms, you should be getting the parameters from the query. not the body -.-;
   var searchTerm = req.query.searchTerm;
